@@ -47,10 +47,11 @@ ticket2.update
 
 customer2.delete
 film2.delete
-ticket1.delete
 
 customer1.name = 'Shia'
 customer1.update
 
 p Customer.all
 p Ticket.all
+p customer1.find_films
+p film1.find_customers
