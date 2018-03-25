@@ -70,4 +70,18 @@ class Film
     return customer_objects
   end
 
+  # Check how many customers are going to watch a certain film
+  def find_number_of_customers
+    sql = "SELECT customers.*
+      FROM customers
+      INNER JOIN tickets
+      ON tickets.customer_id = customers.id
+      WHERE film_id = $1"
+    values = [@id]
+    customers_array = SqlRunner.run(sql, values)
+    customer_objects = customers_array.count
+    return customer_objects
+  end
+
+
 end

@@ -1,5 +1,6 @@
 require('pg')
 require_relative('../db/sql_runner')
+require_relative('./film')
 
 class Customer
 
@@ -70,16 +71,20 @@ class Customer
     return film_objects
   end
 
-  # def show_movies
-  #   sql = "SELECT movies.*
-  #     FROM movies
-  #     INNER JOIN castings
-  #     ON castings.movie_id = movies.id
-  #     WHERE star_id = $1"
-  #   values = [@id]
-  #   movies = SqlRunner.run( sql, values )
-  #   result = movies.map{ |movie| Movie.new(movie) }
-  #   return result
-  # end
+  def find_number_of_tickets
+    sql = "SELECT films.*
+      FROM films
+      INNER JOIN tickets
+      ON tickets.film_id = films.id
+      WHERE customer_id = $1"
+    values = [@id]
+    films_array = SqlRunner.run(sql, values)
+    film_objects = films_array.count
+    return film_objects
+  end
+
+  def buy_ticket(customer, film)
+    customer.funds -= film.price
+  end
 
 end

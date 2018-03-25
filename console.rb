@@ -35,23 +35,32 @@ film3 = Film.new({
 customer1.save
 customer2.save
 customer3.save
+
 film1.save
 film2.save
 film3.save
 
 ticket1 = Ticket.new({'customer_id'=> customer1.id,'film_id'=> film1.id})
-ticket1.save
 ticket2 = Ticket.new({'customer_id'=> customer3.id,'film_id'=> film3.id})
+ticket3 = Ticket.new({'customer_id'=> customer1.id,'film_id'=> film1.id})
+ticket4 = Ticket.new({'customer_id'=> customer1.id,'film_id'=> film2.id})
+
+ticket1.save
 ticket2.save
-ticket2.update
+ticket3.save
+ticket4.save
 
-customer2.delete
-film2.delete
 
-customer1.name = 'Shia'
+p customer1
+customer1.buy_ticket(customer1, film2)
 customer1.update
+p customer1
 
-p Customer.all
-p Ticket.all
-p customer1.find_films
-p film1.find_customers
+
+
+# p Customer.all
+# p Ticket.all
+# p customer1.find_films
+# p film1.find_customers
+# p customer1.find_number_of_tickets
+# p film1.find_number_of_customers
