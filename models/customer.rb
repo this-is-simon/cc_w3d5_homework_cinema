@@ -1,6 +1,8 @@
 require('pg')
 require_relative('../db/sql_runner')
 require_relative('./film')
+require_relative('./screening')
+require_relative('./ticket')
 
 class Customer
 
@@ -61,10 +63,10 @@ class Customer
 
   def find_films
     sql = "SELECT films.*
-      FROM films
-      INNER JOIN tickets
-      ON tickets.film_id = films.id
-      WHERE customer_id = $1"
+    FROM films
+    INNER JOIN tickets
+    ON tickets.film_id = films.id
+    WHERE customer_id = $1"
     values = [@id]
     films_array = SqlRunner.run(sql, values)
     film_objects = films_array.map {|film| Film.new(film)}
@@ -73,18 +75,24 @@ class Customer
 
   def find_number_of_tickets
     sql = "SELECT films.*
-      FROM films
-      INNER JOIN tickets
-      ON tickets.film_id = films.id
-      WHERE customer_id = $1"
+    FROM films
+    INNER JOIN tickets
+    ON tickets.film_id = films.id
+    WHERE customer_id = $1"
     values = [@id]
     films_array = SqlRunner.run(sql, values)
     film_objects = films_array.count
     return film_objects
   end
 
-  def buy_ticket(customer, film)
-    customer.funds -= film.price
+  def buy_ticket(customer, film, screening)
+
+    if screening.available_seats > 0
+      customer.funds -= film.price
+      screening.available_seats -= 1
+    else
+      return "Sorry, film is full!"
+    end
   end
 
 end
